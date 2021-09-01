@@ -15,9 +15,7 @@
     dest: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
 
 - name: Extract archive
-  command: 
-    chdir: "/usr/share /bin/tar xvf /opt/apache-tomcat-{{ tomcat_version }}.tar.gz -C /opt/" 
-    creates: "/opt/apache-tomcat-{{ tomcat_version }}"
+  command: chdir=/usr/share /bin/tar xvf /opt/apache-tomcat-{{ tomcat_version }}.tar.gz -C /opt/ creates=/opt/apache-tomcat-{{ tomcat_version }}
 
 - name: Symlink install directory
   file:
