@@ -25,5 +25,15 @@
 - name: change app permissions for artifact
   command: chown -R app:app /opt/application
 
-- name: Execute application
-  command:  nohup java -jar /opt/application/petclinic.jar &
+- name: copy service file
+  copy:
+    src: petclinic.service
+    dest: /etc/systemd/system/petclinic.service
+  notify:
+    - deamon reload
+    - start petclinic
+
+- name: start service
+  service:
+    name: petclinic
+    state: started

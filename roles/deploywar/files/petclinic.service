@@ -1,0 +1,19 @@
+[Unit]
+Description=My Java driven simple service
+After=syslog.target network.target
+
+[Service]
+SuccessExitStatus=143
+
+User=app
+Group=app
+
+Type=simple
+
+#Environment="JAVA_HOME=/usr"
+WorkingDirectory=/opt/application
+ExecStart=java -jar petclinic.jar
+ExecStop=/bin/kill -15 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -3,3 +3,11 @@
   service:
     name: tomcat
     state: restarted
+- name: deamon reload
+  service:
+    daemon_reload: true
+
+- name: start petclinic
+  service:
+    name: petclinic
+    state: restarted
