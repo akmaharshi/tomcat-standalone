@@ -1,9 +1,29 @@
 ---
+- name: Create application directory
+  file:
+    path: /opt/application
+    state: directory
+
 - name: Download petclinic war from nexus
   get_url:
-    url:  "http://{{ NEXUS_IP }}:{{ nexus_port }}/repository/maven-releases/org/springframework/samples/spring-petclinic/4.2.{{ BUILD_NO }}/spring-petclinic-4.2.{{ BUILD_NO }}.war"
-    dest: "{{ TOMCAT_HOME }}/webapps/petclinic.war"
+    url:  "http://{{ NEXUS_IP }}:{{ nexus_port }}/repository/maven-releases/org/springframework/samples/petclinic/4.2.{{ BUILD_NO }}/petclinic-4.2.{{ BUILD_NO }}.jar"
+    dest: "/opt/application/petclinic.jar"
     url_username: "{{ NEXUS_USER }}"
     url_password: "{{ NEXUS_PASS }}"
     validate_certs: no
-  notify: restart tomcat
+
+- name: create app group
+  group:
+    name: app
+
+- name: create app user
+  user:
+    name: app
+    group: app
+    createhome: no
+
+- name: change app permissions for artifact
+  command: chown -R app:app /opt/application
+
+- name: Execute application
+  command:  nohup java -jar /opt/application/petclinic.jar &

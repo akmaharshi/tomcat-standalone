@@ -10,11 +10,13 @@
     createhome: no
 
 - name: Download Tomcat
-  get_url: url=http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.51/bin/apache-tomcat-8.5.51.tar.gz dest=/opt/apache-tomcat-8.5.51.tar.gz
+  get_url:
+    url: "https://archive.apache.org/dist/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
 
 - name: Unarchive
   unarchive:
-    src: /opt/apache-tomcat-8.5.51.tar.gz
+    src: "/opt/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: /opt
     remote_src: yes
     
@@ -24,7 +26,10 @@
 #    creates: /opt/apache-tomcat-8.5.51
 
 - name: Symlink install directory
-  file: src=/opt/apache-tomcat-8.5.51 path="{{ TOMCAT_HOME }}" state=link
+  file: 
+    src: "/opt/apache-tomcat-{{ tomcat_version }}"
+    path: "{{ TOMCAT_HOME }}" 
+    state: link
 
 - name: Change ownership of Tomcat installation
   file: path="{{ TOMCAT_HOME }}" owner=tomcat group=tomcat state=directory recurse=yes
